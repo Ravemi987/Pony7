@@ -19,4 +19,14 @@ struct s_rl_config {
 
 RLConfig RLConfigDefault(void);
 
+void RLConfigSetGamma(RLConfig *cfg, float v);
+
+void RLConfigSetEpsilon(RLConfig *cfg, float v);
+
+void RLConfigSetAlpha(RLConfig *cfg, float v);
+
+void RLConfigSetSteps(RLConfig *cfg, int v);
+
+void RLConfigSetEpochs(RLConfig *cfg, int v);
+
 #endif

@@ -11,3 +11,23 @@ RLConfig RLConfigDefault(void) {
         .epochs = 100
     };
 }
+
+void RLConfigSetGamma(RLConfig *cfg, float v) {
+    cfg->gamma = v;
+}
+
+void RLConfigSetEpsilon(RLConfig *cfg, float v) {
+    cfg->epsilon = v;
+}
+
+void RLConfigSetAlpha(RLConfig *cfg, float v) {
+    cfg->alpha = v;
+}
+
+void RLConfigSetSteps(RLConfig *cfg, int v) {
+    cfg->steps = v;
+}
+
+void RLConfigSetEpochs(RLConfig *cfg, int v) {
+    cfg->epochs = v;
+}

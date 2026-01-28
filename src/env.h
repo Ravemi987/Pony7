@@ -24,12 +24,14 @@ struct s_rl_env {
     float *rewards;
 
     // Fonctions génériques de transition et de récompenses
-    float *(*Transition)(RLEnv*, int, int);
+    int (*TransitionState)(RLEnv*, int, int);
+    float *(*TransitionArray)(RLEnv*, int, int);
     float (*Reward)(RLEnv*, int, int);
 };
 
 RLEnv *RLEnvCreate(int nStates, int nActions,
                    float *tData, float *rData,
+                   int (*TransitionState)(RLEnv*, int, int),
                    float *(*Transition)(RLEnv*, int, int),
                    float (*Reward)(RLEnv*, int, int));
 
@@ -37,7 +39,9 @@ void RLEnvDelete(RLEnv **env);
 
 int RLEnvGetStatesNumber(RLEnv *e);
 
-float *getTransition(RLEnv *e, int s, int a);
+float *getTransitionArray(RLEnv *e, int s, int a);
+
+int getTransitionState(RLEnv *e, int s, int a);
 
 float getReward(RLEnv *e, int s, int a);
 

@@ -17,6 +17,20 @@ float *RLModelGetStatesValues(RLModel *m);
 
 int *RLModelGetPolicy(RLModel *m);
 
+float *RLModelGetQTable(RLModel *m);
+
+RLConfig *RLModelGetConfig(RLModel *m);
+
+void RLModelPrintStatesValues(RLModel *m);
+
+void RLModelPrintPolicy(RLModel *m);
+
+void RLModelPrintQTable(RLModel *m);
+
 void valueIteration(RLModel *m);
+
+void policyIteration(RLModel *m);
+
+void QLearning(RLModel *m);
 
 #endif

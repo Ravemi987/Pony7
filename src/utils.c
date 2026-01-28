@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 /*
 Somme des produits terme à terme de deux tableaux 1D
@@ -11,6 +12,32 @@ float sum(float *a1, float *a2, int s) {
     }
 
     return r;
+}
+
+float arrayMax(float *a, int n) {
+    float m = a[0];
+    for (int i = 1; i < n; ++i) {
+        if (a[i] > m) m = a[i];
+    }
+    return m;
+}
+
+int arrayMaxIndex(float *a, int n) {
+    float m = a[0];
+    int index = 0;
+    for (int i = 1; i < n; ++i) {
+        if (a[i] > m) {
+            m = a[i];
+            index = i;
+        }
+    }
+    return index;
+}
+
+void arrayRandom(int *a, int nStates, int nActions) {
+    for (int i = 0; i < nStates; ++i) {
+        a[i] = rand() % nActions;
+    }
 }
 
 void printFloatArray(float *a, int s) {
@@ -32,5 +59,14 @@ void printIntArray(int *a, int s) {
             printf("%d\n", a[i]);
         }
         
+    }
+}
+
+void printFloatMatrix(float *a, int nr, int nc) {
+    for (int r = 0; r < nr; ++r) {
+        for (int c = 0; c < nc; ++c) {
+            printf("%8.2f ", a[r * nc + c]);
+        }
+        printf("\n");
     }
 }

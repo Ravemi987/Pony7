@@ -7,7 +7,8 @@ Créé un environnement
 */
 RLEnv *RLEnvCreate(int nStates, int nActions,
                    float *tData, float *rData,
-                   float *(*Transition)(RLEnv*, int, int),
+                   int (*TransitionState)(RLEnv*, int, int),
+                   float *(*TransitionArray)(RLEnv*, int, int),
                    float (*Reward)(RLEnv*, int, int)) {
     RLEnv *env = malloc(sizeof(struct s_rl_env));
 
@@ -20,7 +21,8 @@ RLEnv *RLEnvCreate(int nStates, int nActions,
     env->rewards = rData;
 
     // Fonctions d'accès aux données
-    env->Transition = Transition;
+    env->TransitionState = TransitionState;
+    env->TransitionArray = TransitionArray;
     env->Reward = Reward;
 
     return env;
@@ -51,9 +53,31 @@ Prend en entrée une matrice 3D: pour chaque état et chaque actions,
 la probabilité d'atteindre chaque nouvel état.
 Retourne un tableau 1D: les probabilités d'atteindre les nouveaux états
 */
-float *getTransition(RLEnv *e, int s, int a) {
+float *getTransitionArray(RLEnv *e, int s, int a) {
     int offset = (s * e->nA * e->nS) + (a * e->nS);
     return &(e->transitions[offset]);
+}
+
+/*
+Prend en entrée une matrice 3D: pour chaque état et chaque actions,
+la probabilité d'atteindre chaque nouvel état.
+Retourne le nouvel état choisit.
+*/
+int getTransitionState(RLEnv *e, int s, int a) {
+    int offset = (s * e->nA * e->nS) + (a * e->nS);
+
+    float max = 0;
+    int new_state = 0;
+
+    for (int next_s = 0; next_s < e->nS; ++next_s) {
+        float v = e->transitions[offset + next_s];
+        if (v > 0.0f && v >= max) {
+            max = v;
+            new_state = next_s;
+        }
+    }
+
+    return new_state;
 }
 
 /*

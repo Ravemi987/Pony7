@@ -1,9 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "model.h"
+#include "utils.h"
 
 
 int main(void) {
+
+    srand(42);
 
     float T[] = {
         0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -23,20 +27,39 @@ int main(void) {
         0, -1, 0, 10
     };
 
-    // On définit un environnement avec nos tableaux et fonctions
-    RLEnv *env = RLEnvCreate(6, 4, T, R, getTransition, getReward);
+    RLEnv *env = RLEnvCreate(
+        6, 4, T, R, 
+        getTransitionState, getTransitionArray, getReward
+    );
 
-    // On créé le modèle en passant l'environnement
     RLModel *m = RLModelCreate(env);
 
-    // On exécute l'algorithme
-    valueIteration(m);
 
-    // On affiche les résultats
-    printFloatArray(RLModelGetStatesValues(m), RLEnvGetStatesNumber(env));
-    printIntArray(RLModelGetPolicy(m), RLEnvGetStatesNumber(env));
+    /* --- Value Iteration ---*/
 
-    // On clean
+    // valueIteration(m);
+
+    // RLModelPrintStatesValues(m);
+    // RLModelPrintPolicy(m);
+    
+    /* --- Policy Iteration ---*/
+
+    RLConfig *config = RLModelGetConfig(m);
+    RLConfigSetEpsilon(config, 0.1);
+
+    // policyIteration(m);
+
+    // RLModelPrintStatesValues(m);
+    // RLModelPrintPolicy(m);
+
+    /* --- Q-Learning --- */
+
+    QLearning(m);
+    RLModelPrintQTable(m);
+    RLModelPrintPolicy(m);
+
+    /* -------------------*/
+
     RLModelDelete(&m);
     RLEnvDelete(&env);
 
