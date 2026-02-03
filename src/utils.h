@@ -15,4 +15,6 @@ void printIntArray(int *a, int s);
 
 void printFloatMatrix(float *a, int nr, int nc);
 
+int readMatricesFromFile(char *filename, float **T, float **R);
+
 #endif

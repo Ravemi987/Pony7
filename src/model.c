@@ -37,7 +37,7 @@ RLModel* RLModelCreate(RLEnv *userData) {
     m->QTable = calloc(userData->nS * userData->nA, sizeof(float));
 
     // On a une config par défaut
-    m->config = RLConfigDefault();
+    m->config = RLConfigCreate();
 
     return m;
 };
@@ -54,6 +54,12 @@ void RLModelDelete(RLModel **m) {
     free(*(m));
 
     (*m) = NULL;
+}
+
+/* Setters */
+
+void RLModelSetConfig(RLModel *m, RLConfig cfg) {
+    m->config = cfg;
 }
 
 /* Getters */

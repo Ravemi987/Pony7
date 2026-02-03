@@ -17,7 +17,7 @@ struct s_rl_config {
     int epochs;
 };
 
-RLConfig RLConfigDefault(void);
+RLConfig RLConfigCreate(void);
 
 void RLConfigSetGamma(RLConfig *cfg, float v);
 

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 
-RLConfig RLConfigDefault(void) {
+RLConfig RLConfigCreate(void) {
     return (RLConfig){
         .gamma = 0.2,
         .epsilon = 1e-4,

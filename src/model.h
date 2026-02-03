@@ -13,6 +13,8 @@ RLModel* RLModelCreate(RLEnv *userData);
 
 void RLModelDelete(RLModel **m);
 
+void RLModelSetConfig(RLModel *m, RLConfig cfg);
+
 float *RLModelGetStatesValues(RLModel *m);
 
 int *RLModelGetPolicy(RLModel *m);
