@@ -2,9 +2,10 @@
 
 #include "action.h"
 
-RLAction RLActionCreate(char *name, void (*exec)(void *args), 
+RLAction RLActionCreate(int id, char *name, void (*exec)(void *args), 
                        void *args) {
     return (RLAction) {
+        .id = id,
         .execute = exec,
         .args = args,
         .name = name

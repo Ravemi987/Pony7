@@ -2,7 +2,36 @@
 
 #include <stdlib.h>
 
+/* 
+Environnement avec un tableau de transition (3D)
+et un tableau de récompenses (1D).
+Il contient aussi les fonctions d'accès à cet environnement.
+Un environnement est une interface dont l'utilisateur n'a pour le moment qu'à
+implanter la fonction de génération des tableaux de données. Plus tard, les fonctions
+de transitions et de reward seront aussi dynamiques.
+*/
+struct s_rl_env {
+    // Dimensions des données
+    int nS;
+    int nA;
 
+    // Tableaux en entrée
+    RLState *states;
+    RLAction *actions;
+
+    // Tableaux de données
+    float *transitions;
+    float *rewards;
+
+    // Fonction de générations des tableaux de données
+    int (*Generate)(RLState *, RLAction*, float**, float**);
+};
+
+
+/* 
+Génération des données de l'environnement.
+Fonction implantée par l'utilisateur
+ */
 int RLEnvInit(RLEnv *env) {
     return env->Generate(
         env->states, env->actions,
@@ -15,10 +44,7 @@ Créé un environnement
 */
 RLEnv *RLEnvCreate(int nStates, int nActions,
                    RLState *states, RLAction *actions,
-                   int (*Generate)(RLState *, RLAction*, float**, float**),
-                   int (*TransitionState)(RLEnv*, int, int),
-                   float *(*TransitionArray)(RLEnv*, int, int),
-                   float (*Reward)(RLEnv*, int, int)) {
+                   int (*Generate)(RLState *, RLAction*, float**, float**)) {
     RLEnv *env = malloc(sizeof(struct s_rl_env));
 
     // Dimensions
@@ -35,11 +61,6 @@ RLEnv *RLEnvCreate(int nStates, int nActions,
 
     // Fonction de génération des données
     env->Generate = Generate;
-
-    // Fonctions d'accès aux données
-    env->TransitionState = TransitionState;
-    env->TransitionArray = TransitionArray;
-    env->Reward = Reward;
 
     if (RLEnvInit(env) == -1) return NULL;
 
@@ -59,19 +80,35 @@ void RLEnvDelete(RLEnv **env) {
 
 /* Getters */
 
-int RLEnvGetStatesNumber(RLEnv *e) {
+int RLEnvGetNS(RLEnv *e) {
     return e->nS;
 }
 
-int RLEnvGetActionsNumber(RLEnv *e) {
+int RLEnvGetNA(RLEnv *e) {
     return e->nA;
 }
 
+RLAction RLEnvGetAction(RLEnv *e, int a) {
+    return e->actions[a];
+} 
+
+RLState RLEnvGetState(RLEnv *e, int s) {
+    return e->states[s];
+}
+
 /*
-Prend en entrée une matrice 2D: la récompense pour chaque état et action
+Prend en entrée un environnement et retourne le prochain état
+dans lequel on arrive en effectuant l'action 'a' à partir de l'état 's'
+*/
+int RLEnvGetNextState(RLEnv *e, int s, int a) {
+    return RLEnvGetTState(e, s, a);
+}
+
+/*
+Prend en entrée un env avec une matrice 2D: la récompense pour chaque état et action
 Retourne la récompense.
 */
-float getReward(RLEnv *e, int s, int a) {
+float RLEnvGetR(RLEnv *e, int s, int a) {
     return e->rewards[s * e->nA + a];
 }
 
@@ -80,7 +117,7 @@ Prend en entrée un environnement: pour chaque état et chaque actions,
 on retourne les probabilité d'atteindre chaque nouvel état.
 Retourne un tableau 1D: les probabilités d'atteindre les nouveaux états.
 */
-float *getTransitionArray(RLEnv *e, int s, int a) {
+float *RLEnvGetTArray(RLEnv *e, int s, int a) {
     int offset = (s * e->nA * e->nS) + (a * e->nS);
     return &(e->transitions[offset]);
 }
@@ -88,21 +125,21 @@ float *getTransitionArray(RLEnv *e, int s, int a) {
 /*
 Prend en entrée un environnement: pour chaque état et chaque actions,
 la probabilité d'atteindre chaque nouvel état.
-Retourne le nouvel état choisit.
+Retourne le nouvel état choisit (avec la plus haute probabilité).
 */
-int getTransitionState(RLEnv *e, int s, int a) {
+int RLEnvGetTState(RLEnv *e, int s, int a) {
     int offset = (s * e->nA * e->nS) + (a * e->nS);
 
-    float max = 0;
-    int new_state = 0;
+    float max = -1.0f;
+    int newState = 0;
 
-    for (int next_s = 0; next_s < e->nS; ++next_s) {
-        float v = e->transitions[offset + next_s];
+    for (int nextState = 0; nextState < e->nS; ++nextState) {
+        float v = e->transitions[offset + nextState];
         if (v > 0.0f && v >= max) {
             max = v;
-            new_state = next_s;
+            newState = nextState;
         }
     }
 
-    return new_state;
+    return newState;
 }

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-typedef struct s_rl_sate {
+typedef struct s_rl_state {
     int id;
     char *label;
     void *context;

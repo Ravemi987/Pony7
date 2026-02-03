@@ -9,11 +9,17 @@
 
 typedef struct s_rl_model RLModel;
 
+/* Creation */
+
 RLModel* RLModelCreate(RLEnv *userData);
 
 void RLModelDelete(RLModel **m);
 
+/* Setters */
+
 void RLModelSetConfig(RLModel *m, RLConfig cfg);
+
+/* Getters */
 
 float *RLModelGetStatesValues(RLModel *m);
 
@@ -23,11 +29,22 @@ float *RLModelGetQTable(RLModel *m);
 
 RLConfig *RLModelGetConfig(RLModel *m);
 
+float RLModelGetReward(RLModel *m, int s, int a);
+
+int RLModelGetNextState(RLModel *m, int s, int a);
+
+RLAction RLModelGetActionFromState(RLModel *m , int s);
+
+
+/* Print */
+
 void RLModelPrintStatesValues(RLModel *m);
 
 void RLModelPrintPolicy(RLModel *m);
 
 void RLModelPrintQTable(RLModel *m);
+
+/* Algorithms */
 
 void valueIteration(RLModel *m);
 
