@@ -29,12 +29,11 @@ float *RLModelGetQTable(RLModel *m);
 
 RLConfig *RLModelGetConfig(RLModel *m);
 
-float RLModelGetReward(RLModel *m, int s, int a);
+float RLModelGetReward(RLModel *m, RLState s, RLAction a);
 
-int RLModelGetNextState(RLModel *m, int s, int a);
+RLState RLModelGetNextState(RLModel *m, RLState s, RLAction a);
 
-RLAction RLModelGetBestAction(RLModel *m , int s);
-
+RLAction RLModelGetBestAction(RLModel *m , RLState s);
 
 /* Print */
 

@@ -7,9 +7,6 @@
 #include "state.h"
 #include "action.h"
 
-// Forward déclaration
-typedef struct s_rl_model RLModel;
-
 typedef struct s_rl_env RLEnv;
 
 RLEnv *RLEnvCreate(int nStates, int nActions,
@@ -28,7 +25,7 @@ int RLEnvGetNA(RLEnv *e);
 
 float *RLEnvGetTransitionArray(RLEnv *e, int s, int a);
 
-int RLEnvGetNextState(RLEnv *e, int s, int a);
+int RLEnvGetTransitionState(RLEnv *e, int s, int a);
 
 float RLEnvGetR(RLEnv *e, int s, int a);
 

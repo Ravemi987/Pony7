@@ -81,16 +81,16 @@ RLConfig* RLModelGetConfig(RLModel *m) {
     return &(m->config);
 }
 
-float RLModelGetReward(RLModel *m, int s, int a) {
-    return RLEnvGetR(m->userData, s, a);
+float RLModelGetReward(RLModel *m, RLState s, RLAction a) {
+    return RLEnvGetR(m->userData, s.id, a.id);
 }
 
-int RLModelGetNextState(RLModel *m, int s, int a) {
-    return RLEnvGetNextState(m->userData, s, a);
+RLState RLModelGetNextState(RLModel *m, RLState s, RLAction a) {
+    return RLEnvGetState(m->userData, RLEnvGetTransitionState(m->userData, s.id, a.id));
 }
 
-RLAction RLModelGetBestAction(RLModel *m , int s) {
-    return RLEnvGetAction(m->userData, m->policy[s]);
+RLAction RLModelGetBestAction(RLModel *m , RLState s) {
+    return RLEnvGetAction(m->userData, m->policy[s.id]);
 }
 
 
@@ -246,7 +246,7 @@ void QLearning(RLModel *m) {
                 action = getBestAction(m, state);
             }
 
-            int nextState = RLEnvGetNextState(env, state, action);
+            int nextState = RLEnvGetTransitionState(env, state, action);
             float reward = RLEnvGetR(env, state, action);
 
             float nextValue = getBestNextQValue(m, nextState);

@@ -5,8 +5,8 @@
 
 typedef struct s_rl_agent {
     char *name;
-    int initialState;
-    int goalState;
+    RLState initialState;
+    RLState goalState;
     int maxIter;
     float reward;
     bool sucess;

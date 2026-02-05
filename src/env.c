@@ -119,7 +119,7 @@ Prend en entrée un environnement: pour chaque état et chaque actions,
 la probabilité d'atteindre chaque nouvel état.
 Retourne le nouvel état choisit (avec la plus haute probabilité).
 */
-int RLEnvGetNextState(RLEnv *e, int s, int a) {
+int RLEnvGetTransitionState(RLEnv *e, int s, int a) {
     int offset = (s * e->nA * e->nS) + (a * e->nS);
 
     float max = -1.0f;

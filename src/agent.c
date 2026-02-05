@@ -7,19 +7,19 @@
 
 
 void executeAgent(RLModel *m, RLAgent *agent) {
-    int currentState = agent->initialState;
-    int goalState = agent->goalState; 
+    RLState currentState = agent->initialState;
+    RLState goalState = agent->goalState; 
     
     printf("--- Lancement de l'Agent ---\n");
 
     int steps = 0;
 
-    while (currentState != goalState && steps < agent->maxIter) {
+    while (currentState.id != goalState.id && steps < agent->maxIter) {
         RLAction action = RLModelGetBestAction(m, currentState);
         
         action.execute(action.args);
         
-        int nextState = RLModelGetNextState(m, currentState, action.id);
+        RLState nextState = RLModelGetNextState(m, currentState, action);
         
         currentState = nextState;
         steps++;
@@ -28,6 +28,6 @@ void executeAgent(RLModel *m, RLAgent *agent) {
     RLAction action = RLModelGetBestAction(m, currentState);
     action.execute(action.args);
 
-    agent->reward = RLModelGetReward(m, currentState, action.id);
-    agent->sucess = (currentState == goalState);
+    agent->reward = RLModelGetReward(m, currentState, action);
+    agent->sucess = (currentState.id == goalState.id);
 }

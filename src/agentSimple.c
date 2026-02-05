@@ -1,11 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "model.h"
-#include "utils.h"
-#include "action.h"
-#include "state.h"
-#include "agent.h"
+#include "agentSimple.h"
 
 
 /* Typedef */
@@ -52,7 +48,7 @@ int generateSimpleExampleMatrices(RLState *sArray, RLAction*aArray,
 
 /* Programme principal */
 
-int main(void) {
+int mainSimple(void) {
 
     srand(42);
 
@@ -122,8 +118,8 @@ int main(void) {
 
     RLAgent agent = {
         .name = "Humain",
-        .initialState = 0, 
-        .goalState = 5,
+        .initialState = states[0], 
+        .goalState = states[nStates - 1],
         .maxIter = 20,
         .reward = 0,
         .sucess = false
