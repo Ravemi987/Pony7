@@ -38,7 +38,7 @@ RLModel* RLModelCreate(RLEnv *userData) {
     m->QTable = calloc(RLEnvGetNS(userData)* RLEnvGetNA(userData), sizeof(float));
 
     // On a une config par défaut
-    m->config = RLConfigCreate();
+    m->config = RLDefaultConfig();
 
     return m;
 };
@@ -89,7 +89,7 @@ int RLModelGetNextState(RLModel *m, int s, int a) {
     return RLEnvGetNextState(m->userData, s, a);
 }
 
-RLAction RLModelGetActionFromState(RLModel *m , int s) {
+RLAction RLModelGetBestAction(RLModel *m , int s) {
     return RLEnvGetAction(m->userData, m->policy[s]);
 }
 
@@ -144,7 +144,7 @@ void valueIteration(RLModel *m) {
 
             for (int a = 0; a < RLEnvGetNA(env); ++a) {
                 float q = RLEnvGetR(env, s, a) + gamma * sum(
-                    RLEnvGetTArray(env, s, a), m->stateValues,RLEnvGetNS(env)
+                    RLEnvGetTransitionArray(env, s, a), m->stateValues,RLEnvGetNS(env)
                 );
 
                 if (q > maxQ) {
@@ -176,7 +176,7 @@ void policyEvaluation(RLModel *m, int *policy) {
             int a = policy[s];
 
             m->stateValues[s] = RLEnvGetR(env, s, a) + gamma * sum(
-                RLEnvGetTArray(env, s, a), m->stateValues, RLEnvGetNS(env)
+                RLEnvGetTransitionArray(env, s, a), m->stateValues, RLEnvGetNS(env)
             );
 
             delta = fmax(delta, fabs(m->stateValues[s] - oldValue));
@@ -198,7 +198,7 @@ bool policyImprovement(RLModel *m, int *policy) {
 
         for (int a = 0; a < RLEnvGetNA(env); ++a) {
             float q = RLEnvGetR(env, s, a) + gamma * sum(
-                RLEnvGetTArray(env, s, a), m->stateValues, RLEnvGetNS(env)
+                RLEnvGetTransitionArray(env, s, a), m->stateValues, RLEnvGetNS(env)
             );
 
             if (q > maxQ + 1e-7) {
@@ -246,7 +246,7 @@ void QLearning(RLModel *m) {
                 action = getBestAction(m, state);
             }
 
-            int nextState = RLEnvGetTState(env, state, action);
+            int nextState = RLEnvGetNextState(env, state, action);
             float reward = RLEnvGetR(env, state, action);
 
             float nextValue = getBestNextQValue(m, nextState);

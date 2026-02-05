@@ -97,14 +97,6 @@ RLState RLEnvGetState(RLEnv *e, int s) {
 }
 
 /*
-Prend en entrée un environnement et retourne le prochain état
-dans lequel on arrive en effectuant l'action 'a' à partir de l'état 's'
-*/
-int RLEnvGetNextState(RLEnv *e, int s, int a) {
-    return RLEnvGetTState(e, s, a);
-}
-
-/*
 Prend en entrée un env avec une matrice 2D: la récompense pour chaque état et action
 Retourne la récompense.
 */
@@ -117,7 +109,7 @@ Prend en entrée un environnement: pour chaque état et chaque actions,
 on retourne les probabilité d'atteindre chaque nouvel état.
 Retourne un tableau 1D: les probabilités d'atteindre les nouveaux états.
 */
-float *RLEnvGetTArray(RLEnv *e, int s, int a) {
+float *RLEnvGetTransitionArray(RLEnv *e, int s, int a) {
     int offset = (s * e->nA * e->nS) + (a * e->nS);
     return &(e->transitions[offset]);
 }
@@ -127,7 +119,7 @@ Prend en entrée un environnement: pour chaque état et chaque actions,
 la probabilité d'atteindre chaque nouvel état.
 Retourne le nouvel état choisit (avec la plus haute probabilité).
 */
-int RLEnvGetTState(RLEnv *e, int s, int a) {
+int RLEnvGetNextState(RLEnv *e, int s, int a) {
     int offset = (s * e->nA * e->nS) + (a * e->nS);
 
     float max = -1.0f;

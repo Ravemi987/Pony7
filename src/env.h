@@ -26,9 +26,7 @@ int RLEnvGetNS(RLEnv *e);
 
 int RLEnvGetNA(RLEnv *e);
 
-float *RLEnvGetTArray(RLEnv *e, int s, int a);
-
-int RLEnvGetTState(RLEnv *e, int s, int a);
+float *RLEnvGetTransitionArray(RLEnv *e, int s, int a);
 
 int RLEnvGetNextState(RLEnv *e, int s, int a);
 

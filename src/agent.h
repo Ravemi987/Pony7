@@ -3,11 +3,15 @@
 
 #include "model.h"
 
-void executeAgent(RLModel *m);
+typedef struct s_rl_agent {
+    char *name;
+    int initialState;
+    int goalState;
+    int maxIter;
+    float reward;
+    bool sucess;
+} RLAgent;
 
-void scanPorts(void *args);
-void exploitVuln(void *args);
-void lateralMovement(void *args);
-void exfiltration(void *args);
+void executeAgent(RLModel *m, RLAgent* a);
 
 #endif

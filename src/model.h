@@ -33,7 +33,7 @@ float RLModelGetReward(RLModel *m, int s, int a);
 
 int RLModelGetNextState(RLModel *m, int s, int a);
 
-RLAction RLModelGetActionFromState(RLModel *m , int s);
+RLAction RLModelGetBestAction(RLModel *m , int s);
 
 
 /* Print */
